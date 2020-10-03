@@ -27,7 +27,7 @@ module.exports.each = each;
  * identity: This takes a value and simply returns that exact value that is passed in. 
  * 
  * @param {*} value : The value to be returned from this function. 
- * @return {*} : Returns exact value that was passed into value parameter unchanged. 
+ * @return {*} value : Returns exact value that was passed into value parameter unchanged. 
  */
  
  function identity(value){
@@ -38,7 +38,8 @@ module.exports.each = each;
 /**
  * typeOf: This takes in a value and returns the what type of value it is as a string 
  * 
- * 
+ * @param {*}value: Any value 
+ * @return {string}: Returns type of value as a string
  */
  
 function typeOf(value){
@@ -53,7 +54,15 @@ function typeOf(value){
 module.exports.typeOf = typeOf;
 
 /**
- * first
+ * first: This takes an array and a number and returns the number of items at the beginning of
+ * the given array in a new array. If the array argument provided is not an argument then just return [].
+ * If the number argument is not a number then return the first element in the array. 
+ * If number is negative then return []. If number is greater than array length then return the entire array.
+ * 
+ * @param {Array}: Array which to pull elements from. 
+ * @param {Number}: Numerical value of elements that need to be pulled from given array
+ * @return {Array}: New array with <number> of elements from <array>
+ * 
  * 
  */
  
@@ -74,7 +83,14 @@ function first(array,number){
 module.exports.first = first;
 
 /**
- * last 
+ * last: This will take in an array and a number and return a new array with the <number> of elements
+ *       from the end of the array in a new array. If array argument given is not an array then return [].
+ *       If number argument given is not a number then return the last element in the array.
+ *       If the number given is negative then return []. If the number given is greater than the array length then return the entire array.
+ * 
+ * @param {Array}: Array which to pull elements from. 
+ * @param {Number}: Number is numerical value indicating number of elements to pull from end of array given. 
+ * @return {Array}: New array containing <number> of items from end of original array 
  * 
  */
  
@@ -93,7 +109,14 @@ module.exports.first = first;
 module.exports.last = last;
 
 /**
- * indexOf
+ * indexOf: This will take an array and a value and return the index of where that value was first found in the array. 
+ *          If the <value> is not found in the array then return -1.
+ * 
+ * @param {Array}: Array from which to search through. 
+ * @param {*} any value: This will be the item for which you are looking through the array for. 
+ * 
+ * @return{Number}: This will be index where that value was first found in the array. 
+ * 
  * 
  */
  
@@ -110,7 +133,13 @@ module.exports.last = last;
 module.exports.indexOf = indexOf;
 
 /**
- * contains:
+ * contains: This takes an array and a value and returns true if the array contains the value otherwise it 
+ *           returns false if it does not contain the value. 
+ * 
+ * @param {Array} : Array which to search through to look for the value. 
+ * @param {*} any value: Item to look for in the given array. 
+ * 
+ * @return {Boolean} true or false: Return true if value is found in array and false if it is not found. 
  * 
  */
  function contains( array, value){
@@ -121,7 +150,11 @@ module.exports.contains = contains;
 
 /**
  * 
- * unique:
+ * unique: This will take an array and return a new array with duplicates removed. 
+ * 
+ * @param {Array}: Array which to iterate through to search for duplicates. 
+ * 
+ * @return {Array}: New array with all duplicates removed. 
  * 
  */
  
@@ -137,13 +170,19 @@ module.exports.contains = contains;
 module.exports.unique = unique;
 
 /**
- * filter:
+ * filter: This will take an array and a function and return a new array with elements that held true after running
+ *         the function on them. 
+ * 
+ * @param {Array}: Array for which each element in it will have a function applied. 
+ * @param {Function} func: The function that will be applied to each element in array. 
+ * 
+ * @return {Array}: Array containing only the elements for which running the function returned true. 
  * 
  */
  
  function filter(array, func){
     let filterArray = [];
-   array.each(function(e, i, array){
+   each(array, function(e, i, array){
        let outcome = func(e,i,array);
             if(outcome === true){
             filterArray.push(e); 
@@ -156,13 +195,19 @@ module.exports.filter = filter;
 
 /**
  * 
- * reject:
+ * reject: This will take an array and a function and return an array with the elements for which applying the 
+ *         function resulted in a false result. 
+ * 
+ * @param {Array}: Array with elements that the function will be applied to. 
+ * @param {Function} func: The function that will be applied to each element in the array. 
+ * 
+ * @return {Array}: Array containing all the elements for which applying the function resulted in a false result. 
  * 
  */
  
  function reject(array, func){
     let filterArray = [];
-    array.each(function(e, i, array){
+    each(array, function(e, i, array){
     let outcome = func(e,i,array);
         if(outcome === false){
         filterArray.push(e); 
@@ -175,7 +220,14 @@ module.exports.reject = reject;
 
 /**
  * 
- * partition: 
+ * partition: This will take an array and a function. The function will be applied to each element in the array
+ *            and two subarrays will be returned together in an array. One subarray will contain false results after
+ *            running function and one subarray will contain true results after running function on each element. 
+ * 
+ * @param {Array}: The array for which a function will be run on element. 
+ * @param {Function} func: Function that will be applied to each element in the array.  
+ * @return {Array} array with two subarrays: One array with subarray of true results after running function and subarray of
+ *            of false results after running function. 
  * 
  */
  
@@ -183,11 +235,10 @@ module.exports.reject = reject;
     
     let truthy = [];
     let falsy = [];
-    array.each(function( e, i, array){
-        let result = func(e, i, array);
-            if( result){
+    each(array, function( e, i, array){
+        if(func(e, i, array)){
                truthy.push(e);   
-            }else if(!result){
+            }else if(!func(e, i, array)){
                 falsy.push(e);
             }
         
@@ -199,12 +250,17 @@ module.exports.partition = partition;
 
 /** 
  * 
- * map
+ * map: This will take a collection and a function and apply the function to each element and return 
+ *      an array of the results of running the funciton on the elements. 
+ * 
+ * @param {collection} Array or Object: The collection contains the elements for which the function will be applied to. 
+ * @param {Function} func: The function that will be applied to each element in the collection. 
+ * @return {Array}: New array with all the elements after applying the function to them. 
  */
  
  function map(collection, func){
     let newArray = [];
-    collection.each(function( thing, i, array){
+    each(collection, function( thing, i, array){
       newArray.push(func(thing,i,array)); 
     });
     return newArray;
@@ -215,12 +271,18 @@ module.exports.map = map;
 
 /**
  * 
- * pluck:
+ * pluck: This will take an array of obejcts and a property and find the value for which the key matches the property given. 
+ *
+ * @param {Array} array of objects: The array of objects which to look for the key that matches the property given. 
+ * @param {*}property: Property that represents key. 
+ * 
+ * @return {Object}: The element or element in the objects in the array for which the key matches the property given. 
+ * 
  */
  
  function pluck(array, property){
     
-  return array.map(function(element){
+  return map(array, function(element){
         return element[property];
     });
     
@@ -231,13 +293,22 @@ module.exports.pluck = pluck;
 
 /**
  * 
- * every:
+ * every: Takes a collection and a function and returns a boolean of true if applying the function to every 
+ *         element returned true and false if it is even false for one element. 
+ * 
+ * @param {Collection} array or object: The collection for which the function will be applied to each element. 
+ * @param {Function} func: The function to be applied to each element in array or object. 
+ * 
+ * @return {Boolean} true or false: Return true if applying the function to every item was true and return false if
+ *          applying the function was false even for one item.  Also return true if no function is given and if every
+ *          element on its own is truthy. 
+ * 
  * 
  */
  
  function every(collection,func){
     let result = true;
-    collection.each(function(e, i, collection){
+    each(collection, function(e, i, collection){
         if (typeof func === "function"){ 
             if(!func(e ,i, collection)){
         
@@ -257,12 +328,23 @@ module.exports.every = every;
 
 /** 
  * 
- * some
+ * some: Takes a collection and a function and returns a boolean of false if applying the function to every 
+ *         element returned false and returns true if applying the function is true for even one element. 
+ * 
+ * @param {Collection} array or object: The collection for which the function will be applied to each element. 
+ * @param {Function} func: The function to be applied to each element in array or object. 
+ * 
+ * @return {Boolean} true or false: Return false if applying the function to every item was false and return true if
+ *          applying the function was true even for one item.  Also return true if no function is given and if at least
+ *          one element on its own is truthy. 
+ * 
+ * 
+ * 
  */
  
 function some(collection, func){
     let result = false;
-    collection.each(function(e,i,collection){
+    each(collection, function(e,i,collection){
         if(typeof func !== "function"){
             
             if (e){
@@ -281,7 +363,15 @@ function some(collection, func){
 module.exports.some = some; 
 
 /** 
- * reduce
+ * reduce: This will take an array a function and a seed and return a value of the final function call on all the elements in the array. 
+ * 
+ * @param {Array}: This is the array to apply the function to. 
+ * @param {Function} func: This is the function which will take the arguments of a previous value, element, index,
+ *                  and array.  This function will be applied the items in the array. 
+ * @param {*} Seed: This is the initial value that can be used to start as the initial value. 
+ * @return {*} any value: Depending on what you indicate with your function it can be any final value for which
+ *             the final function calls resolves to.
+ * 
  * 
  */
  
@@ -306,7 +396,13 @@ module.exports.reduce = reduce;
 
 /**
  * 
- * extend:
+ * extend: This will take two or more objects and combine all their elements into one object. 
+ * 
+ * @param{Object}: First object with elements. 
+ * @param{Object}: Second object with elements that will be copied over into first object. 
+ * @param{Object} unlimited possible additional objects: Other objects whose elements will also be copied to first object
+ * 
+ * @return {Object}: Final object with all items from other objects combined. 
  * 
  */
  
